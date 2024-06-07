@@ -19,6 +19,11 @@ CREATE TABLE users(
 	primary key(id)
 );
 
+-- insertion of AUCTIONEER
+insert into users(id, name,cnic,role,email,password,balance)
+values (2, "Ali", "3660209449993", "AUCTIONEER", "ali@gmail.com", "9090", 0)
+
+
 CREATE TABLE UserRoles (
     role ENUM('BUYER', 'SELLER', 'AUCTIONEER') NOT NULL,
     PRIMARY KEY (role)
@@ -35,6 +40,9 @@ CREATE TABLE Sellers (
     itemsSold INT NOT NULL DEFAULT 0,
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
+
+insert into sellers(user_id) values (1)
+insert into Auctioneers(user_id) values (2)
 
 -- Auctioneers table
 CREATE TABLE Auctioneers (
@@ -60,6 +68,9 @@ CREATE TABLE ItemDescriptor (
     price DECIMAL(10, 2) NOT NULL
 );
 
+
+
+
 CREATE TABLE Auctions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
@@ -67,11 +78,14 @@ CREATE TABLE Auctions (
     start_price DECIMAL(10, 2) NOT NULL,
     current_bid DECIMAL(10, 2) DEFAULT NULL,
     auctioneer_id INT NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
     FOREIGN KEY (item_id) REFERENCES Items(id),
     FOREIGN KEY (seller_id) REFERENCES Sellers(user_id),
     FOREIGN KEY (auctioneer_id) REFERENCES Auctioneers(user_id)
 );
 
+select * from auctions
 CREATE TABLE AuctionDescriptor (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
@@ -109,8 +123,4 @@ VALUES ('Vintage Watch', 'A classic vintage watch in perfect condition.', 150.00
 INSERT INTO items (name, description, starting_price, seller_id) 
 VALUES ('Antique Vase', 'A beautiful antique vase from the 19th century.', 200.00, 3);
 
-INSERT INTO items (name, description, starting_price, seller_id) 
-VALUES ('Leather Jacket', 'High-quality leather jacket, barely used.', 120.00, 3);
 
-INSERT INTO items (name, description, starting_price, seller_id) 
-VALUES ('Electric Guitar', 'Electric guitar with amplifier, great sound quality.', 300.00, 3);

@@ -5,13 +5,15 @@ public class Item {
     private String name;
     private double startingPrice;
     private String description;
+    private int sellerId;
 
     // Constructor
-    public Item(int id, String name, double startingPrice, String description) {
+    public Item(int id, String name, double startingPrice, String description, int sellerId) {
         this.id = id;
         this.name = name;
         this.startingPrice = startingPrice;
         this.description = description;
+        this.sellerId = sellerId;
     }
 
 	public int getId() {
@@ -30,7 +32,6 @@ public class Item {
 		this.name = name;
 	}
 
-
 	public double getStartingPrice() {
 		return startingPrice;
 	}
@@ -46,6 +47,16 @@ public class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public int getSellerId() {
+		return sellerId;
+	}
+
+	public void setSellerId(int sellerId) {
+		this.sellerId = sellerId;
+	}
+
+	
     
     
 
