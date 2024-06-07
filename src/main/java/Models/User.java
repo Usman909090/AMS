@@ -3,6 +3,7 @@ package Models;
 import java.sql.SQLException;
 
 import Repositories.UserRepository;
+import Utility.DBConnection;
 
 public class User {
     private int id;
@@ -25,18 +26,10 @@ public class User {
         this.role = role;
     }
     
-    public User(int id, String name, String cnic, String email, String password, double bal, UserRole role) {
-        this.id = id;
-        this.name = name;
-        this.cnic = cnic;
-        this.email = email;
-        this.password = password;
-        this.balance = bal;
-        this.role = role;
-    }
+    
  
     public User(String name, String cnic, String email, String password, UserRole role) throws SQLException {
-        this.id = UserRepository.getLatestUserID();
+        this.id = DBConnection.getLatestUserID();
         this.name = name;
         this.cnic = cnic;
         this.email = email;
@@ -45,15 +38,7 @@ public class User {
         this.role = role;
     }
     
-    public User(String name, String cnic, String email, String password, double bal, UserRole role) throws SQLException {
-        this.id = UserRepository.getLatestUserID();
-        this.name = name;
-        this.cnic = cnic;
-        this.email = email;
-        this.password = password;
-        this.balance = bal;
-        this.role = role;
-    }
+   
 
     public int getId() {
         return id;
@@ -79,8 +64,8 @@ public class User {
         this.cnic = cnic;
     }
 
-    public UserRole getRole() {
-        return role;
+    public String getRole() {
+        return role.getRoleName();
     }
 
     public void setRole(UserRole role) {

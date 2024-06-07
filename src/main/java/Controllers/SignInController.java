@@ -37,7 +37,7 @@ public class SignInController {
 
         try {
             User user = UserRepository.authenticateUser(emailT, passwordT);
-            System.out.println(user);
+            
             if (user != null) {
                 // Navigate to the main application screen
             	
@@ -48,6 +48,20 @@ public class SignInController {
                 alert.setHeaderText(null);
                 alert.setContentText("User logged in");
                 alert.showAndWait();
+                System.out.println(user.getRole());
+                
+                SessionController.getInstance().setCurrentUser(user);
+                
+                if("SELLER".equals(user.getRole())) {
+                	SceneManager.switchScene("/Views/SellerDashboard.fxml");
+                }
+                else if("BUYER".equals(user.getRole())) {
+                	SceneManager.switchScene("/Views/BuyerDashboard.fxml");
+                }
+                else if("AUCTIONEER".equals(user.getRole())) {
+                	SceneManager.switchScene("/Views/AuctioneerDashboard.fxml");
+                }
+                
             } else {
                 // Show error dialog if authentication fails
                 Alert alert = new Alert(AlertType.ERROR);

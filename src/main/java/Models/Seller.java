@@ -9,9 +9,9 @@ public class Seller extends User implements UserItems {
     private int numberOfAuctions;
     private UserInventory inventory;
     
-    public Seller(int id, String name, String cnic, String email, String password, double balance, int numberOfAuctions) {
-    	super(id, name, cnic, email, password, balance, UserRole.BUYER);
-        this.numberOfAuctions = numberOfAuctions;
+    public Seller(int id, String name, String cnic, String email, String password) {
+    	super(id, name, cnic, email, password, UserRole.SELLER);
+        this.numberOfAuctions = 0;
         this.inventory = new UserInventory(id);
     }
 
@@ -40,8 +40,8 @@ public class Seller extends User implements UserItems {
     }
     
     @Override
-    public String displayItemDetails(int index) {
-    	return getItem(index).displayDetails();
+    public String getItemDescription(int index) {
+    	return getItem(index).getDescription();
     }
 
 	@Override

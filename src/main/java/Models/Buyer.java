@@ -8,9 +8,9 @@ public class Buyer extends User implements UserItems {
     private int numberOfBids;
     private UserInventory inventory;
 
-    public Buyer(int id, String name, String cnic, String email, String password, double balance, int numberOfBids) {
-        super(id, name, cnic, email, password, balance, UserRole.AUCTIONEER);
-        this.numberOfBids = numberOfBids;
+    public Buyer(int id, String name, String cnic, String email, String password) {
+        super(id, name, cnic, email, password, UserRole.BUYER);
+        this.numberOfBids = 0;
         this.inventory = new UserInventory(id);
     }
 
@@ -39,8 +39,8 @@ public class Buyer extends User implements UserItems {
     }
     
     @Override
-    public String displayItemDetails(int index) {
-    	return getItem(index).displayDetails();
+    public String getItemDescription(int index) {
+    	return getItem(index).getDescription();
     }
 
 	@Override

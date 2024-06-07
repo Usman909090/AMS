@@ -14,7 +14,7 @@
    <children>
       <ImageView fitHeight="465.0" fitWidth="696.0" layoutX="200.0" layoutY="65.0" opacity="0.58" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <image>
-            <Image url="@../../Images/HomePage.jpg" />
+            <Image url="@../Images/HomePage.jpg" />
          </image>
       </ImageView>
       <Text layoutX="26.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to AMS" wrappingWidth="402.354248046875">
@@ -78,7 +78,7 @@
          </font>
       </Text>
 
-    		<RadioButton fx:id="buyerRadioButton" layoutX="439.0" layoutY="210" onAction="#handleBidderRadioButtonSelection" text="Buyer" />
+    		<RadioButton fx:id="bidderRadioButton" layoutX="439.0" layoutY="210" onAction="#handleBidderRadioButtonSelection" text="Buyer" />
     		<RadioButton fx:id="sellerRadioButton" layoutX="439.0" layoutY="230" onAction="#handleSellerRadioButtonSelection" text="Seller" />
 
    </children>

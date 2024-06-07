@@ -10,6 +10,7 @@ import java.util.List;
 import com.google.common.hash.Hashing;
 import com.mysql.cj.protocol.a.authentication.Sha256PasswordPlugin;
 
+import Controllers.SessionController;
 import Interfaces.GenericCRUD;
 import Utility.DBConnection;
 import Models.User;
@@ -46,12 +47,11 @@ public class UserRepository implements GenericCRUD<User, Integer> {
             insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setString(1, user.getName());
             insertStatement.setString(2, user.getCnic());
-            insertStatement.setString(3, user.getRole().getRoleName());
+            insertStatement.setString(3, user.getRole());
             insertStatement.setString(4, user.getEmail());
             
-            // hash the password
-            String hashedPassword = Hashing.sha256().hashString("ams" + user.getPassword(), StandardCharsets.UTF_8).toString();
-            insertStatement.setString(5, hashedPassword);
+            
+            insertStatement.setString(5, user.getPassword());
             insertStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Failed to insert user: " + e.getMessage());
@@ -79,24 +79,36 @@ public class UserRepository implements GenericCRUD<User, Integer> {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
+        User user = null;
         try {
             connection = DBConnection.getConnection();
             String query = "SELECT * FROM users WHERE email = ? AND password = ?";
             statement = connection.prepareStatement(query);
             statement.setString(1, email);
-            statement.setString(2, Hashing.sha256().hashString(password, StandardCharsets.UTF_8).toString());
+            statement.setString(2, password);
+           System.out.println(email);
+           System.out.println(password);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String cnic = resultSet.getString("cnic");
-                UserRole role = UserRole.getRole((resultSet.getString("role")));
+                UserRole role = null;
+                if(resultSet.getString("role").equals("SELLER")) {
+                	role = UserRole.SELLER;
+                }
+                if(resultSet.getString("role").equals("BUYER")) {
+                	role = UserRole.BUYER;
+                }
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
-                double balance = resultSet.getDouble("balance");
-                return new User(id, name, cnic, userEmail, userPassword, balance, role);
-            } else {
-                return null; // User not found or invalid credentials
+                System.out.println(password);
+                user = new User(id, name, cnic, userEmail, userPassword, role);
+                
+                
+                
+                
+                
             }
         } finally {
             // Close resources in reverse order of their creation
@@ -109,7 +121,9 @@ public class UserRepository implements GenericCRUD<User, Integer> {
             if (connection != null) {
                 connection.close();
             }
+            
         }
+        return user;
     }
 
 	@Override
@@ -133,7 +147,6 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                     resultSet.getString("cnic"),
                     resultSet.getString("email"),
                     resultSet.getString("password"),
-                    resultSet.getDouble("balance"),
                     UserRole.getRole(resultSet.getString("role"))
                 );
             }
@@ -167,7 +180,6 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                     resultSet.getString("cnic"),
                     resultSet.getString("email"),
                     resultSet.getString("password"),
-                    resultSet.getDouble("balance"),
                     UserRole.getRole(resultSet.getString("role"))
                 );
                 users.add(user);
@@ -193,7 +205,7 @@ public class UserRepository implements GenericCRUD<User, Integer> {
             statement = connection.prepareStatement(query);
             statement.setString(1, user.getName());
             statement.setString(2, user.getCnic());
-            statement.setString(3, user.getRole().getRoleName());
+            statement.setString(3, user.getRole());
             statement.setString(4, user.getEmail());
             String hashedPassword = Hashing.sha256().hashString("ams" + user.getPassword(), StandardCharsets.UTF_8).toString();
             statement.setString(5, hashedPassword);
@@ -224,25 +236,5 @@ public class UserRepository implements GenericCRUD<User, Integer> {
         }
     }
 	
-	public static int getLatestUserID() throws SQLException {
-		Connection connection = null;
-        PreparedStatement statement = null;
-
-        int id = -1;
-        try {
-            connection = DBConnection.getConnection();
-            String query = "SELECT MAX(id) as latest_id FROM Users";
-            statement = connection.prepareStatement(query);
-            ResultSet rs = statement.executeQuery();
-            	
-            if (rs.next()) {
-            	id = rs.getInt("id");
-            }
-        } finally {
-            if (statement != null) statement.close();
-            if (connection != null) connection.close();
-        }
-        
-        return id;
-	}
+	
 }

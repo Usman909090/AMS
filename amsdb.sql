@@ -1,6 +1,12 @@
+create database ams
+use ams
 
-CREATE DATABASE AMS;
-use AMS;
+
+
+
+
+
+
 
 CREATE TABLE users(
 	id int AUTO_INCREMENT,
@@ -38,16 +44,16 @@ CREATE TABLE Auctioneers (
     FOREIGN KEY (user_id) REFERENCES Users(id)
 );
 
-CREATE TABLE Items (
+CREATE TABLE items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    seller_id INT,
-    FOREIGN KEY (seller_id) REFERENCES Sellers(user_id)
+    description TEXT,
+    starting_price DECIMAL(10, 2) NOT NULL,
+    seller_id INT NOT NULL,
+    FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
-CREATE TABLE ItemDescription (
+CREATE TABLE ItemDescriptor (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description VARCHAR(255) NOT NULL,
@@ -66,7 +72,7 @@ CREATE TABLE Auctions (
     FOREIGN KEY (auctioneer_id) REFERENCES Auctioneers(user_id)
 );
 
-CREATE TABLE AuctionDescriptions (
+CREATE TABLE AuctionDescriptor (
     id INT AUTO_INCREMENT PRIMARY KEY,
     item_id INT NOT NULL,
     seller_id INT NOT NULL,
@@ -77,3 +83,34 @@ CREATE TABLE AuctionDescriptions (
     FOREIGN KEY (seller_id) REFERENCES Sellers(user_id),
     FOREIGN KEY (auctioneer_id) REFERENCES Auctioneers(user_id)
 );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO items (name, description, starting_price, seller_id) 
+VALUES ('Vintage Watch', 'A classic vintage watch in perfect condition.', 150.00, 3);
+
+INSERT INTO items (name, description, starting_price, seller_id) 
+VALUES ('Antique Vase', 'A beautiful antique vase from the 19th century.', 200.00, 3);
+
+INSERT INTO items (name, description, starting_price, seller_id) 
+VALUES ('Leather Jacket', 'High-quality leather jacket, barely used.', 120.00, 3);
+
+INSERT INTO items (name, description, starting_price, seller_id) 
+VALUES ('Electric Guitar', 'Electric guitar with amplifier, great sound quality.', 300.00, 3);

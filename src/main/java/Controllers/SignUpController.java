@@ -2,6 +2,8 @@ package Controllers;
 
 import java.sql.SQLException;
 
+import Models.Buyer;
+import Models.Seller;
 import Models.User;
 import Models.UserRole;
 import Repositories.UserRepository;
@@ -13,7 +15,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
 public class SignUpController {
-	UserRepository userRepository;
+	UserRepository userRepository = new UserRepository();
+	
+	
 	
 	@FXML
 	private TextField name;
@@ -63,7 +67,6 @@ public class SignUpController {
         String passwordT = password.getText().trim();
         String roleT = bidderRadioButton.isSelected() ? "Buyer" : "Seller";
         UserRole role = UserRole.getRole(roleT);
-        System.out.println(nameT);
         
         
         if (nameT.isEmpty() || cnicT.isEmpty() || emailT.isEmpty() || passwordT.isEmpty()) {
@@ -107,9 +110,22 @@ public class SignUpController {
             alert.showAndWait();
             return;
         }
-        
+        User user = null;
         try {
-            userRepository.save(new User(nameT, cnicT, emailT, passwordT, role));
+        	
+            
+            if(roleT.equals("Seller")) {
+            	user = userRepository.save(new User(nameT, cnicT, emailT, passwordT, UserRole.SELLER));
+            }
+            else if(roleT.equals("Buyer")) {
+            	user = userRepository.save(new User(nameT, cnicT, emailT, passwordT, UserRole.BUYER));
+            }
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Success");
+            alert.setHeaderText(null);
+            alert.setContentText("User signed up");
+            alert.showAndWait();
+            
         } catch (SQLException e) {
             // Handle database errors
             System.out.println("Failed to sign up: " + e.getMessage());

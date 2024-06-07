@@ -6,13 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import Models.User;
+
 
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/BootDB";
+    private static final String URL = "jdbc:mysql://localhost:3306/ams";
     private static final String USER = "root";
-    private static final String PASSWORD = "zait708090";
+    private static final String PASSWORD = "071277407890";
     
     public static Connection getConnection() throws SQLException {
         Connection connection = null;
@@ -25,4 +25,26 @@ public class DBConnection {
         }
         return connection;
     }   
+    
+    public static int getLatestUserID() throws SQLException {
+		Connection connection = null;
+        PreparedStatement statement = null;
+
+        int id = -1;
+        try {
+            connection = DBConnection.getConnection();
+            String query = "SELECT MAX(id) as latest_id FROM Users";
+            statement = connection.prepareStatement(query);
+            ResultSet rs = statement.executeQuery();
+            	
+            if (rs.next()) {
+            	id = rs.getInt("latest_id");
+            }
+        } finally {
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+        
+        return id;
+	}
 }
