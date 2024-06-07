@@ -8,28 +8,51 @@ public class User {
     private int id;
     private String name;
     private String cnic;
-    private String role;
+    private UserRole role;
     private String email;
     private String password;
+    private double balance;
 
     // Constructor, getters, and setters
 
-    public User(int id, String name, String cnic, String role, String email, String password) {
+    public User(int id, String name, String cnic, String email, String password, UserRole role) {
         this.id = id;
         this.name = name;
         this.cnic = cnic;
-        this.role = role;
         this.email = email;
         this.password = password;
+        this.balance = (double) 0.0;
+        this.role = role;
     }
     
-    public User(String name, String cnic, String role, String email, String password) {
-        this.id = getLatestUserID();
+    public User(int id, String name, String cnic, String email, String password, double bal, UserRole role) {
+        this.id = id;
         this.name = name;
         this.cnic = cnic;
-        this.role = role;
         this.email = email;
         this.password = password;
+        this.balance = bal;
+        this.role = role;
+    }
+ 
+    public User(String name, String cnic, String email, String password, UserRole role) throws SQLException {
+        this.id = UserRepository.getLatestUserID();
+        this.name = name;
+        this.cnic = cnic;
+        this.email = email;
+        this.password = password;
+        this.balance = (double) 0.0;
+        this.role = role;
+    }
+    
+    public User(String name, String cnic, String email, String password, double bal, UserRole role) throws SQLException {
+        this.id = UserRepository.getLatestUserID();
+        this.name = name;
+        this.cnic = cnic;
+        this.email = email;
+        this.password = password;
+        this.balance = bal;
+        this.role = role;
     }
 
     public int getId() {
@@ -56,11 +79,11 @@ public class User {
         this.cnic = cnic;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -80,14 +103,11 @@ public class User {
         this.password = password;
     }
     
-    private int getLatestUserID() {
-    	int id = -1;
-    	try {
-    		id = UserRepository.getLatestUserID();
-    	} catch (SQLException e) {
-    		e.printStackTrace();
-    	}
-    	
-    	return id;
+    public double getBalance() {
+    	return this.balance;
+    }
+    
+    public void setBalance(double bal) {
+    	this.balance = bal;
     }
 }

@@ -10,9 +10,9 @@ import Models.User;
 
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/ams";
+    private static final String URL = "jdbc:mysql://localhost:3306/BootDB";
     private static final String USER = "root";
-    private static final String PASSWORD = "071277407890";
+    private static final String PASSWORD = "zait708090";
     
     public static Connection getConnection() throws SQLException {
         Connection connection = null;

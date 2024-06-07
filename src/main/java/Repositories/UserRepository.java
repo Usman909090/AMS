@@ -10,8 +10,10 @@ import java.util.List;
 import com.google.common.hash.Hashing;
 import com.mysql.cj.protocol.a.authentication.Sha256PasswordPlugin;
 
+import Interfaces.GenericCRUD;
 import Utility.DBConnection;
 import Models.User;
+import Models.UserRole;
 
 
 public class UserRepository implements GenericCRUD<User, Integer> {
@@ -44,7 +46,7 @@ public class UserRepository implements GenericCRUD<User, Integer> {
             insertStatement = connection.prepareStatement(insertQuery);
             insertStatement.setString(1, user.getName());
             insertStatement.setString(2, user.getCnic());
-            insertStatement.setString(3, user.getRole());
+            insertStatement.setString(3, user.getRole().getRoleName());
             insertStatement.setString(4, user.getEmail());
             
             // hash the password
@@ -88,10 +90,11 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
                 String cnic = resultSet.getString("cnic");
-                String role = resultSet.getString("role");
+                UserRole role = UserRole.getRole((resultSet.getString("role")));
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
-                return new User(id, name, cnic, role, userEmail, userPassword);
+                double balance = resultSet.getDouble("balance");
+                return new User(id, name, cnic, userEmail, userPassword, balance, role);
             } else {
                 return null; // User not found or invalid credentials
             }
@@ -128,9 +131,10 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getString("cnic"),
-                    resultSet.getString("role"),
                     resultSet.getString("email"),
-                    resultSet.getString("password")
+                    resultSet.getString("password"),
+                    resultSet.getDouble("balance"),
+                    UserRole.getRole(resultSet.getString("role"))
                 );
             }
 
@@ -161,9 +165,10 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                     resultSet.getInt("id"),
                     resultSet.getString("name"),
                     resultSet.getString("cnic"),
-                    resultSet.getString("role"),
                     resultSet.getString("email"),
-                    resultSet.getString("password")
+                    resultSet.getString("password"),
+                    resultSet.getDouble("balance"),
+                    UserRole.getRole(resultSet.getString("role"))
                 );
                 users.add(user);
             }
@@ -188,7 +193,7 @@ public class UserRepository implements GenericCRUD<User, Integer> {
             statement = connection.prepareStatement(query);
             statement.setString(1, user.getName());
             statement.setString(2, user.getCnic());
-            statement.setString(3, user.getRole());
+            statement.setString(3, user.getRole().getRoleName());
             statement.setString(4, user.getEmail());
             String hashedPassword = Hashing.sha256().hashString("ams" + user.getPassword(), StandardCharsets.UTF_8).toString();
             statement.setString(5, hashedPassword);

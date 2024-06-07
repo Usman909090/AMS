@@ -78,7 +78,7 @@
          </font>
       </Text>
 
-    		<RadioButton fx:id="bidderRadioButton" layoutX="439.0" layoutY="210" onAction="#handleBidderRadioButtonSelection" text="Bidder" />
+    		<RadioButton fx:id="buyerRadioButton" layoutX="439.0" layoutY="210" onAction="#handleBidderRadioButtonSelection" text="Buyer" />
     		<RadioButton fx:id="sellerRadioButton" layoutX="439.0" layoutY="230" onAction="#handleSellerRadioButtonSelection" text="Seller" />
 
    </children>

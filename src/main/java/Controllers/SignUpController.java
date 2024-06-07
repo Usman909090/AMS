@@ -3,6 +3,7 @@ package Controllers;
 import java.sql.SQLException;
 
 import Models.User;
+import Models.UserRole;
 import Repositories.UserRepository;
 import Utility.SceneManager;
 import javafx.fxml.FXML;
@@ -58,9 +59,10 @@ public class SignUpController {
     public void handleSignUp() {
         String nameT = name.getText().trim();
         String cnicT = cnic.getText().trim();
-        String roleT = bidderRadioButton.isSelected() ? "Bidder" : "Seller";
         String emailT = email.getText().trim();
         String passwordT = password.getText().trim();
+        String roleT = bidderRadioButton.isSelected() ? "Buyer" : "Seller";
+        UserRole role = UserRole.getRole(roleT);
         System.out.println(nameT);
         
         
@@ -107,7 +109,7 @@ public class SignUpController {
         }
         
         try {
-            userRepository.save(new User(nameT, cnicT, roleT, emailT, passwordT));
+            userRepository.save(new User(nameT, cnicT, emailT, passwordT, role));
         } catch (SQLException e) {
             // Handle database errors
             System.out.println("Failed to sign up: " + e.getMessage());
