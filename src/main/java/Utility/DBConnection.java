@@ -6,13 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
-
+import Models.User;
+import Models.UserRole;
 
 public class DBConnection {
-    private static final String URL = "jdbc:mysql://localhost:3306/ams";
+    private static final String URL = "jdbc:mysql://localhost:3306/ams?autoReconnect=true&useSSL=false";
     private static final String USER = "root";
-    private static final String PASSWORD = "071277407890";
+    private static final String PASSWORD = "zait708090";
     
     public static Connection getConnection() throws SQLException {
         Connection connection = null;
@@ -46,5 +46,38 @@ public class DBConnection {
         }
         
         return id;
+	}
+    
+	public static User getUserById(Integer id) throws SQLException {
+		Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        User user = null;
+
+        try {
+            connection = DBConnection.getConnection();
+            String query = "SELECT * FROM users WHERE id = ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                user = new User(
+                    resultSet.getInt("id"),
+                    resultSet.getString("name"),
+                    resultSet.getString("cnic"),
+                    resultSet.getString("email"),
+                    resultSet.getString("password"),
+                    UserRole.getRole(resultSet.getString("role"))
+                );
+            }
+
+        } finally {
+            if (resultSet != null) resultSet.close();
+            if (statement != null) statement.close();
+            if (connection != null) connection.close();
+        }
+
+        return user;
 	}
 }

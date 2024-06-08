@@ -14,8 +14,6 @@ public class ItemRepository {
 	
 	Connection connection = null;
 	
-	
-	
 	public static List<Item> getItemsBySeller(int sellerId) {
         List<Item> items = new ArrayList<>();
         Connection connection = null;

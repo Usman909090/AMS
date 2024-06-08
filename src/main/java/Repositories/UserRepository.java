@@ -102,13 +102,9 @@ public class UserRepository implements GenericCRUD<User, Integer> {
                 }
                 String userEmail = resultSet.getString("email");
                 String userPassword = resultSet.getString("password");
-                System.out.println(password);
+                
+                // create the user instance
                 user = new User(id, name, cnic, userEmail, userPassword, role);
-                
-                
-                
-                
-                
             }
         } finally {
             // Close resources in reverse order of their creation
